@@ -1,0 +1,64 @@
+﻿@model IPTVChannelListProxy.Models.SourcesViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h2>IPTV Sources</h2>
+
+<div class="text-right mb-3">
+    <a href="#" data-toggle="modal" data-target="#addSourceModal" class="btn btn-primary">Add source</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Last scan</th>
+            <th>URL</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var source in Model.M3USources)
+        {
+            <tr>
+                <td>@source.Name</td>
+                <td>@(source.LastScan?.ToString() ?? "Never")</td>
+                <td>@(source.Url.Length > 40 ? source.Url.Substring(0, 40) + "..." : source.Url)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="addSourceModal" class="modal" tabindex="-1" role="dialog">
+    <form method="post" asp-controller="Source" asp-action="AddM3U">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add M3U Source</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Name" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Url</label>
+                        <input type="text" class="form-control" id="url" name="url" placeholder="Url" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary" value="Add" />
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+<div class="text-left mb-3">
+    <a class="btn btn-secondary" asp-controller="Source" asp-action="rescan">Rescan now</a>
+</div>

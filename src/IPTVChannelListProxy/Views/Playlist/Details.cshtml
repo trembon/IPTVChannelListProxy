@@ -1,0 +1,91 @@
+﻿@model IPTVChannelListProxy.Database.Playlist
+
+@{
+    ViewData["Title"] = "Playlist: " + Model.Name;
+}
+
+<h2>Playlist: @Model.Name</h2>
+
+<div class="text-right mb-3">
+    <a href="#" data-toggle="modal" data-target="#addChannelModal" class="btn btn-primary">Add channel</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Channel</th>
+            <th>EPG</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var channel in Model.Channels)
+        {
+            <tr>
+                <td>@channel.Name</td>
+                <td><span>@channel.Channel?.Name</span> (<a href="#" class="set-channel-btn" data-id="@channel.ID" data-toggle="modal" data-target="#setChannelModal">set</a>)</td>
+                <td>@channel.EPG?.ID (<a href="#">set</a>)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="addChannelModal" class="modal" tabindex="-1" role="dialog">
+    <form method="post" asp-action="AddChannel">
+        <input type="hidden" name="playlist" value="@Model.ID" />
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Channel to playlist</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Name" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary" value="Add" />
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="setChannelModal" class="modal" tabindex="-1" role="dialog">
+    <form method="post" asp-action="SetChannel">
+        <input type="hidden" name="playlistChannel" value="0" />
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Set Channel source</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary search" type="button">Search</button>
+                        </div>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
